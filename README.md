@@ -4,7 +4,13 @@ A tiny macOS menu bar app that shows you how much time is left in your day.
 
 That's it. No accounts, no syncing, no notifications. Just a number counting down in your menu bar.
 
-![sec](https://github.com/user-attachments/assets/fdbca2ff-51b2-4abc-8a9c-8e9e3b17cb0d) ![hour](https://github.com/user-attachments/assets/2ba1d2c8-b5fe-475e-89a4-4cd2139de805) ![days](https://github.com/user-attachments/assets/03261bf1-d7d8-44bf-aec7-799acba57f71)
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/fdbca2ff-51b2-4abc-8a9c-8e9e3b17cb0d" width="220"/></td>
+    <td><img src="https://github.com/user-attachments/assets/2ba1d2c8-b5fe-475e-89a4-4cd2139de805" width="220"/></td>
+    <td><img src="https://github.com/user-attachments/assets/03261bf1-d7d8-44bf-aec7-799acba57f71" width="220"/></td>
+  </tr>
+</table>
 
 ---
 
@@ -41,7 +47,7 @@ Your choice is saved. Resets automatically at midnight.
 
 ## Why
 
-I wanted a constant reminder that the day is finite. Not in an anxious way — just as a nudge to be intentional. A clock tells you what time it is. TickDown tells you what's left.
+I wanted a constant reminder that the day is finite. Not in an anxious way, just as a nudge to be intentional. A clock tells you what time it is. TickDown tells you what's left.
 
 ---
 
