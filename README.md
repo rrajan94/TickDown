@@ -53,28 +53,28 @@ I wanted a constant reminder that the day is finite. Not in an anxious way, just
 
 ## Install
 
-Right now you need to build it yourself in Xcode. No App Store, no DMG yet.
+### Download (easiest)
+
+1. Go to [Releases](https://github.com/rrajan94/TickDown/releases/latest)
+2. Download `TickDown.dmg`
+3. Open it, drag the app to Applications
+4. Launch it from Applications
+
+> If macOS blocks the app, right-click → Open → Open anyway. This happens because the app isn't signed with an Apple Developer certificate yet.
+
+### Build from source
 
 **Requirements**
 - macOS 13 or later
 - Xcode 15 or later
 
-**Steps**
-
-1. Clone the repo
 ```bash
 git clone https://github.com/rrajan94/TickDown.git
 cd TickDown
-```
-
-2. Open in Xcode
-```bash
 open TickDown.xcodeproj
 ```
 
-3. Hit **⌘R** to build and run
-
-4. Look at your menu bar — you'll see the countdown
+Hit **⌘R** to build and run.
 
 > The app has no Dock icon by design. It lives only in the menu bar.
 
@@ -88,7 +88,6 @@ Things I want to add:
 - [ ] Color shifts as the day runs out (green → amber → red)
 - [ ] Percentage mode — show `73.4%` instead of raw seconds
 - [ ] Launch at login toggle inside the app
-- [ ] DMG release so no Xcode needed
 
 ---
 
