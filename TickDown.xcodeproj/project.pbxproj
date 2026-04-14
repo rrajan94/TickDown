@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		329527DE2F8EA67900A94BDC /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 329527DD2F8EA67300A94BDC /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		329527C72F8EA00800A94BDC /* TickDown.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TickDown.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		329527DD2F8EA67300A94BDC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -32,6 +37,7 @@
 		329527BE2F8EA00800A94BDC = {
 			isa = PBXGroup;
 			children = (
+				329527DD2F8EA67300A94BDC /* README.md */,
 				329527C92F8EA00800A94BDC /* TickDown */,
 				329527C82F8EA00800A94BDC /* Products */,
 			);
@@ -119,6 +125,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				329527DE2F8EA67900A94BDC /* README.md in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

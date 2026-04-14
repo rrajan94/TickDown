@@ -37,7 +37,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func updateDisplay() {
         let mode = UserDefaults.standard.string(forKey: "displayMode") ?? "seconds_day"
-        let label = TimeCalculator.menuBarLabel(for: mode)
+        let showPercentage = UserDefaults.standard.bool(forKey: "showPercentage")
+        
+        let label: String
+        if showPercentage {
+            let progress = TimeCalculator.progressElapsed(for: mode)
+            let remaining = (1.0 - progress) * 100.0
+            label = String(format: "%.1f%%", remaining)
+        } else {
+            label = TimeCalculator.menuBarLabel(for: mode)
+        }
+        
         DispatchQueue.main.async {
             if let button = self.statusItem.button {
                 let attr = NSAttributedString(

@@ -3,6 +3,7 @@ import Combine
 
 struct PopoverView: View {
     @State private var selectedMode: String = UserDefaults.standard.string(forKey: "displayMode") ?? "seconds_day"
+    @State private var showPercentage: Bool = UserDefaults.standard.bool(forKey: "showPercentage")
     @State private var tick = false
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
@@ -18,14 +19,13 @@ struct PopoverView: View {
         ("hours_year",   "Hours left this year",  "globe.badge.chevron.backward", "This Year"),
     ]
 
-    var currentValue: String {
-        _ = tick // trigger re-render
-        return TimeCalculator.menuBarLabel(for: selectedMode)
-    }
-
     var progress: Double {
         _ = tick
         return TimeCalculator.progressElapsed(for: selectedMode)
+    }
+
+    var percentageRemaining: Double {
+        return (1.0 - progress) * 100.0
     }
 
     var progressColor: Color {
@@ -45,26 +45,40 @@ struct PopoverView: View {
     var body: some View {
         VStack(spacing: 0) {
 
-            // Header
+            // Header - fixed height so it does not jump when toggling
             VStack(spacing: 6) {
                 Text("TickDown")
                     .font(.system(size: 13, weight: .semibold, design: .rounded))
                     .foregroundColor(.secondary)
 
-                Text(rawValue())
-                    .font(.system(size: 42, weight: .bold, design: .monospaced))
-                    .foregroundColor(.primary)
-                    .minimumScaleFactor(0.5)
-                    .lineLimit(1)
+                if showPercentage {
+                    Text(String(format: "%.1f%%", percentageRemaining))
+                        .font(.system(size: 42, weight: .bold, design: .monospaced))
+                        .foregroundColor(.primary)
+                        .minimumScaleFactor(0.5)
+                        .lineLimit(1)
 
-                Text(unitLabel())
-                    .font(.system(size: 11, weight: .medium, design: .rounded))
-                    .foregroundColor(.secondary)
-                    .textCase(.uppercase)
-                    .tracking(1.5)
+                    Text("remaining")
+                        .font(.system(size: 11, weight: .medium, design: .rounded))
+                        .foregroundColor(.secondary)
+                        .textCase(.uppercase)
+                        .tracking(1.5)
+                } else {
+                    Text(rawValue())
+                        .font(.system(size: 42, weight: .bold, design: .monospaced))
+                        .foregroundColor(.primary)
+                        .minimumScaleFactor(0.5)
+                        .lineLimit(1)
+
+                    Text(unitLabel())
+                        .font(.system(size: 11, weight: .medium, design: .rounded))
+                        .foregroundColor(.secondary)
+                        .textCase(.uppercase)
+                        .tracking(1.5)
+                }
             }
+            .frame(height: 110)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 20)
             .padding(.horizontal, 16)
             .background(Color(NSColor.controlBackgroundColor))
 
@@ -105,7 +119,6 @@ struct PopoverView: View {
                                     onTap: {
                                         selectedMode = mode.id
                                         UserDefaults.standard.set(mode.id, forKey: "displayMode")
-                                        // Refresh menu bar
                                         if let delegate = NSApp.delegate as? AppDelegate {
                                             delegate.updateDisplay()
                                         }
@@ -121,17 +134,38 @@ struct PopoverView: View {
             Divider()
 
             // Footer
-            HStack {
+            HStack(spacing: 0) {
+                HStack(spacing: 6) {
+                    Text("Show % remaining")
+                        .font(.system(size: 11))
+                        .foregroundColor(.secondary)
+
+                    Toggle("", isOn: Binding(
+                        get: { showPercentage },
+                        set: { val in
+                            showPercentage = val
+                            UserDefaults.standard.set(val, forKey: "showPercentage")
+                            if let delegate = NSApp.delegate as? AppDelegate {
+                                delegate.updateDisplay()
+                            }
+                        }
+                    ))
+                    .toggleStyle(.switch)
+                    .scaleEffect(0.75)
+                    .frame(width: 38)
+                }
+
                 Spacer()
-                Button("Quit TickDown") {
+
+                Button("Quit") {
                     NSApp.terminate(nil)
                 }
                 .buttonStyle(.plain)
                 .font(.system(size: 11))
                 .foregroundColor(.secondary)
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
+            .frame(height: 36)
+            .padding(.horizontal, 12)
         }
         .frame(width: 320, height: 420)
         .onReceive(timer) { _ in
@@ -142,37 +176,31 @@ struct PopoverView: View {
     func rawValue() -> String {
         _ = tick
         switch selectedMode {
-        case "seconds_day":   return formatNumber(TimeCalculator.secondsLeftInDay())
-        case "minutes_day":   return formatNumber(TimeCalculator.minutesLeftInDay())
+        case "seconds_day":   return "\(TimeCalculator.secondsLeftInDay())"
+        case "minutes_day":   return "\(TimeCalculator.minutesLeftInDay())"
         case "hours_day":     return String(format: "%.1f", TimeCalculator.hoursLeftInDay())
-        case "days_week":     return formatNumber(TimeCalculator.secondsLeftInWeek() / 86400)
+        case "days_week":     return "\(TimeCalculator.secondsLeftInWeek() / 86400)"
         case "hours_week":    return String(format: "%.0f", TimeCalculator.hoursLeftInWeek())
-        case "days_month":    return formatNumber(TimeCalculator.daysLeftInMonth())
+        case "days_month":    return "\(TimeCalculator.daysLeftInMonth())"
         case "hours_month":   return String(format: "%.0f", TimeCalculator.hoursLeftInMonth())
-        case "days_year":     return formatNumber(TimeCalculator.daysLeftInYear())
+        case "days_year":     return "\(TimeCalculator.daysLeftInYear())"
         case "hours_year":    return String(format: "%.0f", TimeCalculator.hoursLeftInYear())
-        default:              return formatNumber(TimeCalculator.secondsLeftInDay())
+        default:              return "\(TimeCalculator.secondsLeftInDay())"
         }
-    }
-
-    func formatNumber(_ n: Int) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        return formatter.string(from: NSNumber(value: n)) ?? "\(n)"
     }
 
     func unitLabel() -> String {
         switch selectedMode {
-        case "seconds_day":            return "seconds left today"
-        case "minutes_day":            return "minutes left today"
-        case "hours_day":              return "hours left today"
-        case "days_week":              return "days left this week"
-        case "hours_week":             return "hours left this week"
-        case "days_month":             return "days left this month"
-        case "hours_month":            return "hours left this month"
-        case "days_year":              return "days left this year"
-        case "hours_year":             return "hours left this year"
-        default:                       return ""
+        case "seconds_day":   return "seconds left today"
+        case "minutes_day":   return "minutes left today"
+        case "hours_day":     return "hours left today"
+        case "days_week":     return "days left this week"
+        case "hours_week":    return "hours left this week"
+        case "days_month":    return "days left this month"
+        case "hours_month":   return "hours left this month"
+        case "days_year":     return "days left this year"
+        case "hours_year":    return "hours left this year"
+        default:              return ""
         }
     }
 }

@@ -84,9 +84,9 @@ Hit **⌘R** to build and run.
 
 Things I want to add:
 
+- [x] Percentage mode — toggle between raw numbers and % remaining
 - [ ] Focus timer with notifications (set X minutes, get pinged)
 - [ ] Color shifts as the day runs out (green → amber → red)
-- [ ] Percentage mode — show `73.4%` instead of raw seconds
 - [ ] Launch at login toggle inside the app
 
 ---
